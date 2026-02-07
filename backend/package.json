@@ -1,0 +1,29 @@
+{
+  "name": "matrix",
+  "version": "1.0.0",
+  "description": "minimal auth app",
+  "keywords": [
+    "promise",
+    "async",
+    "UnhandledPromiseRejectionWarning",
+    "PromiseRejectionHandleWarning"
+  ],
+  "homepage": "https://github.com/PetrosBinas/Matrix#readme",
+  "bugs": {
+    "url": "https://github.com/PetrosBinas/Matrix/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PetrosBinas/Matrix.git"
+  },
+  "license": "MIT",
+  "author": "Petros Binas",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

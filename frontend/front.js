@@ -13,7 +13,7 @@ const nums = "0123456789";
 
 const aplhabet = katakana + latin + nums;
 
-const fontSize = 14;
+const fontSize = 12;
 const columns = canvas.width/fontSize;
 const rainDrops = [];
 
@@ -24,6 +24,8 @@ const signBtn = startPage.querySelector("#signUp");
 const login = document.querySelector("#login");
 const signup = document.querySelector("#bePart");
 const backBtns = document.querySelectorAll(".back");
+const logInBtn = document.querySelector("#loginBtn");
+const createBtn = document.querySelector("#createBtn");
 
 
 
@@ -63,21 +65,134 @@ function removeActive(){
     }
 }
 
-getIntoBtn.addEventListener("click", () => {
+getIntoBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     removeActive();
     login.classList.add("active");
     console.log("signup classes:", login.classList);
 });
 
-signBtn.addEventListener("click", () => {
+signBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     removeActive();
     signup.classList.add("active");
     console.log("signup classes:", signup.classList);
 });
 
 for (const btn of backBtns){
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+        e.preventDefault();
         removeActive();
         startPage.classList.add("active");
     });
+}
+
+
+// Login getting the inputs and send them to backend!
+logInBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const mailElement = document.querySelector("#logemail");
+    const email = mailElement.value;
+    const passElement = document.querySelector("#logpass");
+    const pass = passElement.value;
+
+    if (!email || !email.includes("@") || !email.includes(".") || pass.length < 8){
+        mailElement.value = "";
+        passElement.value = "";
+        const panel = logInBtn.parentNode;
+        mailElement.classList.add("error");
+        passElement.classList.add("error");
+        logInBtn.classList.add("error");
+        panel.classList.add("error");
+        panel.querySelector(".back").classList.add("error");
+        setTimeout(() => {
+            mailElement.classList.remove("error");
+            passElement.classList.remove("error");
+            logInBtn.classList.remove("error");
+            panel.classList.remove("error");
+            panel.querySelector(".back").classList.remove("error");            
+        }, 1000);
+        return;
+    }
+    // send to backend the login info for auth
+    mailElement.value = "";
+    passElement.value = ""; 
+    const res = await logInPost(email,pass);
+    const data = await res.json();
+    console.log(data);
+});
+
+function logInPost(email,pass){
+    try {
+        const res = fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                email: email,
+                password: pass
+            })
+        });
+        return res;
+    }
+    catch(err){
+        console.log(err.message);
+        return;
+    }
+}
+
+
+// Signu getting inputs and sends them to backend
+createBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const mailElement = document.querySelector("#createmail");
+    const email = mailElement.value;
+    const passElement = document.querySelector("#createpass");
+    const pass = passElement.value;   
+    function wrongInp() {
+        mailElement.value = "";
+        passElement.value = "";
+        const panel = createBtn.parentNode;
+        mailElement.classList.add("error");
+        passElement.classList.add("error");
+        createBtn.classList.add("error");
+        panel.classList.add("error");
+        panel.querySelector(".back").classList.add("error");
+        setTimeout(() => {
+            mailElement.classList.remove("error");
+            passElement.classList.remove("error");
+            createBtn.classList.remove("error");
+            panel.classList.remove("error");
+            panel.querySelector(".back").classList.remove("error");            
+        }, 1000);        
+    }
+    if (!email || !email.includes("@") || !email.includes(".") || pass.length < 8){
+        wrongInp();
+        return;
+    }
+    // send create info to backend
+    mailElement.value = "";
+    passElement.value = "";
+    const res = await createPost(email,pass);
+    const data = await res.json();
+    console.log(data);
+});
+
+// signup post request
+function createPost(email,pass){
+
+    try {
+        const res = fetch("http://localhost:3000/signup", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                email:email,
+                password: pass
+            })
+        });
+        return res;
+    }
+    catch(err){
+        console.log(err.message);
+        return;
+    }
 }

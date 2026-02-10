@@ -53,32 +53,32 @@ const draw = () => {
 
 setInterval(draw, 30);
 
-
+// for slight smooth start
 setTimeout(() => {
     startPage.classList.add("active");
 },1000);
-
+// removes all active classes
 function removeActive(){
     const screens = document.querySelectorAll(".screen");
     for (const screen of screens){
         screen.classList.remove("active");
     }
 }
-
+// moves front to login form
 getIntoBtn.addEventListener("click", (e) => {
     e.preventDefault();
     removeActive();
     login.classList.add("active");
     console.log("signup classes:", login.classList);
 });
-
+//moves front to signup form
 signBtn.addEventListener("click", (e) => {
     e.preventDefault();
     removeActive();
     signup.classList.add("active");
     console.log("signup classes:", signup.classList);
 });
-
+// returns to startpage
 for (const btn of backBtns){
     btn.addEventListener("click", (e) => {
         e.preventDefault();
@@ -122,6 +122,7 @@ logInBtn.addEventListener("click", async (e) => {
     console.log(data);
 });
 
+// login POST request
 function logInPost(email,pass){
     try {
         const res = fetch("http://localhost:3000/login", {

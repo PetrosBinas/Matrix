@@ -2,8 +2,7 @@
 
 module.exports = { addUser, logInUser };
 
-const { response } = require("express");
-
+const { response } = require("express"); 
 
 const Pool = require("pg").Pool;
 const pool = new Pool({

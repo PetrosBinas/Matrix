@@ -17,13 +17,13 @@ const pool = new Pool({
 
 async function addUser(email, hashedPass){
     const res = await pool.query(`INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email`,[email,hashedPass]);
-    console.log(res.rows);
-    return res.rows[0];
+    if(res.rows.length > 0){return res.rows[0]}
+    else{return null}
 }
 
 
 async function logInUser(email) {
     const res = await pool.query(`SELECT * FROM users WHERE email = $1`,[email]);
-    console.log(res.rows);
-    return res.rows[0];
+    if(res.rows.length > 0){return res.rows[0]}
+    else{return null}
 }

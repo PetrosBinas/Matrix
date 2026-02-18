@@ -23,20 +23,23 @@ app.use(express.json());
 app.post("/signup", async (req, res) => {
   const { email, password } = req.body;
   const hashedPass = await auth.hashPassword(password);
-  console.log(email, hashedPass);
   try {
     const data = await db.addUser(email, hashedPass);
     return res.status(201).json({ ok: true, data });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ ok: false, error: "FAIL" });
+      // handling duplicate email
+      if(error.code === "23505"){
+	console.log(error.message);
+	  return res.status(400).json({ ok: false, error: "FAIL"});
+      }else{
+	return res.status(500).json({ ok: false, error: "FAIL" });
+      }
   }
 });
 
 // on login POST we start the credentials check and return success if OK
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
   try {
     const data = await db.logInUser(email);
     const password_hash = data.password_hash;
